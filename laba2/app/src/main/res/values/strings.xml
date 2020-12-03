@@ -1,0 +1,36 @@
+<resources>
+    <string name="app_name">Timer</string>
+    <string name="title_activity_sequence_page">FullscreenActivity</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="add_title">Добавление списка таймеров</string>
+    <string name="name_sequence">Название списка</string>
+    <string name="rgb">Цвет в rgb</string>
+    <string name="add">Сохранить</string>
+    <string name="delete">Удалить</string>
+    <string name="edit">Изменить</string>
+    <string name="pick_category">Категории</string>
+    <string name="add_category_title">Новая категория</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="name_category">Названание категории</string>
+    <string name="TitleSetting">Настройки</string>
+    <string name="TextViewDarkThema">Тёмная тема</string>
+    <string name="SwitchDarkTheme">Тёмная тема</string>
+    <string name="TextViewSettingFontSize">Размер шрифта</string>
+    <string name="SettingDelete">Удалить все данные</string>
+    <string name="buttonCategory">Категории</string>
+    <string name="buttonSetting">Настройки</string>
+    <string name="ButtonAdd">Добавить</string>
+    <string name="buttonPrev">ПРЕД</string>
+    <string name="buttonStop">СТОП</string>
+    <string name="buttonStart">СТАРТ</string>
+    <string name="buttonNext">СЛЕД</string>
+    <string name="buttonAddTimer">Добавить таймер</string>
+    <string name="save">Сохранить</string>
+    <string name="Language">Язык</string>
+    <string-array name="Languages">
+        <item>Русский</item>
+        <item>English</item>
+    </string-array>
+</resources>
