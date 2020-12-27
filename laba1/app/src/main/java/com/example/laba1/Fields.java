@@ -1,7 +1,5 @@
 package com.example.laba1;
 
-import android.content.ClipboardManager;
-import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -19,12 +17,9 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 
-public class Fields extends Fragment {
-
-    ClipboardManager clipboard;
+public class  Fields extends Fragment {
     MainViewModel mainViewModel;
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -37,9 +32,15 @@ public class Fields extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View layout = inflater.inflate(R.layout.fileds_fragment, container, false);
+        baseFunctionality(inflater, container, savedInstanceState, layout);
+        return layout;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    protected void baseFunctionality(LayoutInflater inflater, ViewGroup container,
+                                     Bundle savedInstanceState, View layout){
         Spinner inputSpinner = (Spinner) layout.findViewById(R.id.inputSpinner);
         setSpinner(layout, inputSpinner, Unit.values(), mainViewModel.getInputSpinner());
-
 
         final EditText edit = layout.findViewById(R.id.inputField);
         final TextView outputField = layout.findViewById(R.id.outputField);
@@ -56,13 +57,8 @@ public class Fields extends Fragment {
             @Override
             public void onChanged(Unit newInput) {
                 Unit[] units = Arrays.stream(Unit.values())
-                        .filter(value -> value.getCategory() == newInput.getCategory() && mainViewModel.getOutputSpinner().getValue() != value)
+                        .filter(value -> value.getCategory() == newInput.getCategory())
                         .toArray(Unit[]::new);
-                if(newInput.getCategory() == mainViewModel.getOutputSpinner().getValue().getCategory()){
-                    ArrayList<Unit> temp = new ArrayList<>(Arrays.asList(units));
-                    temp.add(0,  mainViewModel.getOutputSpinner().getValue());
-                    units = temp.toArray(new Unit[0]);
-                }
                 Spinner outputSpinner = (Spinner)layout.findViewById(R.id.outputSpinner);
                 setSpinner(layout, outputSpinner, units, mainViewModel.getOutputSpinner());
             }
@@ -78,15 +74,10 @@ public class Fields extends Fragment {
         mainViewModel.getInputData().observe(getViewLifecycleOwner(), inputObserver);
         mainViewModel.getInputSpinner().observe(getViewLifecycleOwner(), inputSpinnerObserver);
         mainViewModel.getOutputSpinner().observe(getViewLifecycleOwner(), outputSpinnerObserver);
-
-        clipboard = (ClipboardManager)getContext().getSystemService(Context.CLIPBOARD_SERVICE);
-        layout.findViewById(R.id.coppyInput).setOnClickListener(item -> mainViewModel.coppy(TypeCoppy.INPUT, clipboard));
-        layout.findViewById(R.id.coppyOutput).setOnClickListener(item -> mainViewModel.coppy(TypeCoppy.OUTPUT, clipboard));
-        return layout;
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
-    private void setSpinner(View layout, Spinner spinner, Unit[] units, MutableLiveData<Unit> liveSpinner){
+    protected void setSpinner(View layout, Spinner spinner, Unit[] units, MutableLiveData<Unit> liveSpinner){
         String[] unitsSpinner = Arrays.stream(units).map(value -> value.name()).toArray(String[]::new);
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), R.layout.support_simple_spinner_dropdown_item , unitsSpinner);
         adapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
