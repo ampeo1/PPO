@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">Battleship</string>
+    <string name="gmail">Войти с помощью GMail</string>
+    <string name="icon_gmail">icon_gmail</string>
+    <string name="exit_acc">Выйти с аккаунта</string>
+    <string name="profile">Профиль</string>
+    <string name="create_room">Создать комнату</string>
+    <string name="connect_room">Подключиться к комнате</string>
 </resources>
