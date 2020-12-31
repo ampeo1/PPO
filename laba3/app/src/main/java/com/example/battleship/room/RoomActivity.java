@@ -14,36 +14,41 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.battleship.R;
 import com.squareup.picasso.Picasso;
 
-public class ConnectRoomActivity extends AppCompatActivity {
+public class RoomActivity extends AppCompatActivity {
     RoomViewModel mViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_room);
+        if(getIntent().getStringExtra("id_room") != null){
+            mViewModel = new ViewModelProvider(this, new RoomViewModelFactory(
+                    this.getApplication(), getIntent().getStringExtra("id_room")))
+                    .get(RoomViewModel.class);
+        }
+        else{
+            mViewModel = new ViewModelProvider(this).get(RoomViewModel.class);
+        }
 
-        mViewModel = new ViewModelProvider(this, new RoomViewModelFactory(
-                this.getApplication(), getIntent().getStringExtra("id_room")))
-                .get(RoomViewModel.class);
 
         TextView text = findViewById(R.id.id_room);
         text.setText(text.getText() + mViewModel.getIdRoom());
 
-        text = findViewById(R.id.second_username);
-        text.setText(mViewModel.getUserName());
-
-        ImageView image = findViewById(R.id.second_avatar);
+        ImageView image = findViewById(R.id.first_avatar);
         Picasso.with(getApplicationContext())
                 .load(mViewModel.getPhotoUri())
                 .error(R.drawable.user)
                 .into(image);
+
+        text = findViewById(R.id.first_username);
+        text.setText(mViewModel.getUserName());
 
         Button btn = findViewById(R.id.btn_ready);
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mViewModel.changeStatus();
-                ImageView image = findViewById(R.id.second_status);
+                ImageView image = findViewById(R.id.first_status);
                 if (mViewModel.getStatus()){
                     Picasso.with(getApplicationContext()).load(R.drawable.tick).into(image);
                 }
@@ -53,7 +58,7 @@ public class ConnectRoomActivity extends AppCompatActivity {
             }
         });
 
-        final ImageView imageView = findViewById(R.id.first_avatar);
+        final ImageView imageView = findViewById(R.id.second_avatar);
         mViewModel.getEnemyAvatarUri().observe(this, new Observer<Uri>() {
             @Override
             public void onChanged(Uri uri) {
@@ -63,7 +68,7 @@ public class ConnectRoomActivity extends AppCompatActivity {
             }
         });
 
-        final TextView textView = findViewById(R.id.first_username);
+        final TextView textView = findViewById(R.id.second_username);
         mViewModel.getEnemyUserName().observe(this, new Observer<String>() {
             @Override
             public void onChanged(String s) {
@@ -71,7 +76,7 @@ public class ConnectRoomActivity extends AppCompatActivity {
             }
         });
 
-        final ImageView enemyStatus = findViewById(R.id.first_status);
+        final ImageView enemyStatus = findViewById(R.id.second_status);
         mViewModel.getEnemystatus().observe(this, new Observer<Boolean>() {
             @Override
             public void onChanged(Boolean aBoolean) {

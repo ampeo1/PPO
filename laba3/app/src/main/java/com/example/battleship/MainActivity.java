@@ -13,8 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.example.battleship.room.ConnectRoomActivity;
-import com.example.battleship.room.CreateRoomActivity;
+import com.example.battleship.room.RoomActivity;
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -60,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), CreateRoomActivity.class);
+                Intent intent = new Intent(getApplicationContext(), RoomActivity.class);
                 startActivity(intent);
             }
         });
@@ -76,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
         mViewModel.getIdRoom().observe(this, new Observer<String>() {
             @Override
             public void onChanged(String s) {
-                Intent intent = new Intent(getApplicationContext(), ConnectRoomActivity.class);
+                Intent intent = new Intent(getApplicationContext(), RoomActivity.class);
                 intent.putExtra("id_room", s);
                 startActivity(intent);
             }
@@ -97,7 +96,6 @@ public class MainActivity extends AppCompatActivity {
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                Intent intent = new Intent(getApplicationContext(), ConnectRoomActivity.class);
                                 mViewModel.connectRoom(input.getText().toString());
                             }
                         })
