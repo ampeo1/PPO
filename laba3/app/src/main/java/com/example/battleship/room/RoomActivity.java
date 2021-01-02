@@ -1,5 +1,6 @@
 package com.example.battleship.room;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
@@ -12,6 +13,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.battleship.R;
+import com.example.battleship.game.CreateShipsActivity;
 import com.squareup.picasso.Picasso;
 
 public class RoomActivity extends AppCompatActivity {
@@ -51,6 +53,10 @@ public class RoomActivity extends AppCompatActivity {
                 ImageView image = findViewById(R.id.first_status);
                 if (mViewModel.getStatus()){
                     Picasso.with(getApplicationContext()).load(R.drawable.tick).into(image);
+                    if (mViewModel.getEnemystatus().getValue()){
+                        Intent intent = new Intent(getApplicationContext(), CreateShipsActivity.class);
+                        startActivity(intent);
+                    }
                 }
                 else{
                     Picasso.with(getApplicationContext()).load(R.drawable.cross).into(image);
@@ -84,6 +90,10 @@ public class RoomActivity extends AppCompatActivity {
                     Picasso.with(getApplicationContext())
                             .load(R.drawable.tick)
                             .into(enemyStatus);
+                    if(mViewModel.getStatus()){
+                        Intent intent = new Intent(getApplicationContext(), CreateShipsActivity.class);
+                        startActivity(intent);
+                    }
                 }
                 else{
                     Picasso.with(getApplicationContext())

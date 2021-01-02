@@ -83,6 +83,7 @@ public class RoomViewModel extends AndroidViewModel {
     public MutableLiveData<Boolean> getEnemystatus() {
         if (enemyStatus == null){
             enemyStatus = new MutableLiveData<Boolean>();
+            enemyStatus.setValue(false);
         }
 
         return enemyStatus;
