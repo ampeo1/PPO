@@ -34,7 +34,7 @@ public class MapAdapter extends RecyclerView.Adapter<MapAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull final MapAdapter.ViewHolder holder, final int position) {
         holder.image.setOnDragListener(new View.OnDragListener() {
-            private boolean status = true;
+            private boolean status = false;
             @Override
             public boolean onDrag(View v, DragEvent event) {
 
@@ -44,10 +44,10 @@ public class MapAdapter extends RecyclerView.Adapter<MapAdapter.ViewHolder> {
                 // Handles each of the expected events
                 switch(action) {
                     case DragEvent.ACTION_DRAG_STARTED:
-                        Log.e("ACTION_DRAG_STARTED", String.valueOf(holder.image.getId()));
                         return true;
                     case DragEvent.ACTION_DRAG_ENTERED:
                         status = true;
+                        Log.d("ACTION_DRAG_ENTERED",String.valueOf(status));
                         // Applies a green tint to the View. Return true; the return value is ignored.
                         holder.image.setColorFilter(Color.GREEN);
 
@@ -62,6 +62,7 @@ public class MapAdapter extends RecyclerView.Adapter<MapAdapter.ViewHolder> {
                         holder.image.clearColorFilter();
                         holder.image.setColorFilter(Color.RED);
                         status = false;
+                        Log.d("ACTION_DRAG_EXITED",String.valueOf(status));
                         return true;
 
                     case DragEvent.ACTION_DROP:
@@ -73,6 +74,7 @@ public class MapAdapter extends RecyclerView.Adapter<MapAdapter.ViewHolder> {
 
                         // Invalidates the view to force a redraw
                         holder.image.invalidate();
+                        Log.d("ACTION_DRAG_DROP",String.valueOf(status));
                         return status;
 
                     case DragEvent.ACTION_DRAG_ENDED:
@@ -81,9 +83,9 @@ public class MapAdapter extends RecyclerView.Adapter<MapAdapter.ViewHolder> {
 
                         // Invalidates the view to force a redraw
                         holder.image.invalidate();
-                        Log.e("ACTION_DRAG_ENDED",String.valueOf(event.getResult()));
+                        Log.d("ACTION_DRAG_ENDED",String.valueOf(event.getResult()));
                         if (event.getResult()) {
-                            Log.e("ACTION_DRAG_ENDED", "зашёл");
+                            Log.d("ACTION_DRAG_ENDED", "зашёл");
                             fields.get(position).setStatus(StatusField.SHIP);
                             notifyDataSetChanged();
                         }
@@ -106,11 +108,11 @@ public class MapAdapter extends RecyclerView.Adapter<MapAdapter.ViewHolder> {
         switch(fields.get(position).getStatus()){
             case EMPTY:
                 holder.image.setImageResource(R.drawable.empty_field);
-                Log.e("Constructor", "EMPTY");
+                Log.d("Constructor", "EMPTY");
                 break;
             case SHIP:
                 holder.image.setImageResource(R.drawable.part_ship);
-                Log.e("Constructor", "SHIP");
+                Log.d("Constructor", "SHIP");
                 break;
         }
     }
