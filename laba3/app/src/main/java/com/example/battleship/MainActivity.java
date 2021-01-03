@@ -26,10 +26,10 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         mViewModel = new ViewModelProvider(this).get(MainActivityViewModel.class);
 
-        if (mViewModel.isUser()){
+        /*if (mViewModel.isUser()){
             Intent intent = new Intent(getApplicationContext(), FirebaseUIActivity.class);
             startActivity(intent);
-        }
+        }*/
 
         Button btn = findViewById(R.id.btn_exit_acc);
         btn.setOnClickListener(new View.OnClickListener() {

@@ -57,10 +57,17 @@ public class RoomViewModel extends AndroidViewModel {
     }
 
     public Uri getPhotoUri(){
+        if (user == null){
+            return Uri.EMPTY;
+        }
+
         return user.getPhotoUrl();
     }
 
     public String getUserName(){
+        if(user == null){
+            return "NoName";
+        }
         return user.getDisplayName();
     }
 
@@ -93,8 +100,8 @@ public class RoomViewModel extends AndroidViewModel {
         user = FirebaseAuth.getInstance().getCurrentUser();
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         userRef = database.getReference(idRoom).child(userEnum.name());
-        userRef.child("avatar").setValue(user.getPhotoUrl().toString());
-        userRef.child("username").setValue(user.getDisplayName());
+        userRef.child("avatar").setValue(getPhotoUri().toString());
+        userRef.child("username").setValue(getUserName());
 
         if (userEnum == UserEnum.FIRST_USER){
             enemyRef = database.getReference(idRoom).child(UserEnum.SECOND_USER.name());
