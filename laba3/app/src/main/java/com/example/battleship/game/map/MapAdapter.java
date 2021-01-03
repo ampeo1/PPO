@@ -47,6 +47,7 @@ public class MapAdapter extends RecyclerView.Adapter<MapAdapter.ViewHolder> {
                         Log.e("ACTION_DRAG_STARTED", String.valueOf(holder.image.getId()));
                         return true;
                     case DragEvent.ACTION_DRAG_ENTERED:
+                        status = true;
                         // Applies a green tint to the View. Return true; the return value is ignored.
                         holder.image.setColorFilter(Color.GREEN);
 
