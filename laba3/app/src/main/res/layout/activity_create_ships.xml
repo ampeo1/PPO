@@ -25,9 +25,11 @@
         app:layout_constraintTop_toBottomOf="@+id/create_ship_map"
         app:srcCompat="@drawable/part_ship" />
 
-    <ImageView
-        android:id="@+id/imageView3"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        app:srcCompat="@drawable/empty_field" />
+    <TextView
+        android:id="@+id/test"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/create_ship_map"
+        android:layout_marginTop="99dp" />
+
 </RelativeLayout>
