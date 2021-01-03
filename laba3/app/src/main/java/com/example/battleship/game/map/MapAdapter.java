@@ -1,7 +1,6 @@
 package com.example.battleship.game.map;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.util.Log;
 import android.view.DragEvent;
 import android.view.LayoutInflater;
@@ -49,7 +48,8 @@ public class MapAdapter extends RecyclerView.Adapter<MapAdapter.ViewHolder> {
                         status = true;
                         Log.d("ACTION_DRAG_ENTERED",String.valueOf(status));
                         // Applies a green tint to the View. Return true; the return value is ignored.
-                        holder.image.setColorFilter(Color.GREEN);
+                        holder.image.setImageResource(R.drawable.part_ship);
+                        fields.get(position).setStatus(StatusField.SHIP);
 
                         // Invalidate the view to force a redraw in the new tint
                         holder.image.invalidate();
@@ -60,7 +60,8 @@ public class MapAdapter extends RecyclerView.Adapter<MapAdapter.ViewHolder> {
 
                     case DragEvent.ACTION_DRAG_EXITED:
                         holder.image.clearColorFilter();
-                        holder.image.setColorFilter(Color.RED);
+                        holder.image.setImageResource(R.drawable.empty_field);
+                        fields.get(position).setStatus(StatusField.EMPTY);
                         status = false;
                         Log.d("ACTION_DRAG_EXITED",String.valueOf(status));
                         return true;
@@ -84,12 +85,12 @@ public class MapAdapter extends RecyclerView.Adapter<MapAdapter.ViewHolder> {
                         // Invalidates the view to force a redraw
                         holder.image.invalidate();
                         Log.d("ACTION_DRAG_ENDED",String.valueOf(event.getResult()));
-                        if (event.getResult()) {
+                        /*if (event.getResult()) {
                             Log.d("ACTION_DRAG_ENDED", "зашёл");
                             fields.get(position).setStatus(StatusField.SHIP);
-                            notifyDataSetChanged();
-                        }
-
+                             notifyDataSetChanged();
+                        }*/
+                        notifyDataSetChanged();
 
                         // Does a getResult(), and displays what happened.
 
