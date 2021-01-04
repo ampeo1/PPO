@@ -29,18 +29,25 @@ public class RoomViewModel extends AndroidViewModel {
     private MutableLiveData<Uri> enemyAvatarUri;
     private MutableLiveData<Boolean> enemyStatus;
     private String idRoom;
+    private UserEnum userEnum;
 
 
     public RoomViewModel(@NonNull Application application){
         super(application);
         idRoom = UUID.randomUUID().toString().substring(0, 6);
-        setData(UserEnum.FIRST_USER);
+        userEnum = UserEnum.FIRST_USER;
+        setData(userEnum);
+    }
+
+    public UserEnum getUserEnum() {
+        return userEnum;
     }
 
     public RoomViewModel(@NonNull Application application, String idRoom){
         super(application);
         this.idRoom = idRoom;
-        setData(UserEnum.SECOND_USER);
+        userEnum = UserEnum.SECOND_USER;
+        setData(userEnum);
     }
 
     public String getIdRoom() {

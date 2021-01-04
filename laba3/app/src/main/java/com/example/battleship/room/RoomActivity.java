@@ -92,6 +92,8 @@ public class RoomActivity extends AppCompatActivity {
                             .into(enemyStatus);
                     if(mViewModel.getStatus()){
                         Intent intent = new Intent(getApplicationContext(), CreateShipsActivity.class);
+                        intent.putExtra("id_room", mViewModel.getIdRoom());
+                        intent.putExtra("user", mViewModel.getUserEnum());
                         startActivity(intent);
                     }
                 }
