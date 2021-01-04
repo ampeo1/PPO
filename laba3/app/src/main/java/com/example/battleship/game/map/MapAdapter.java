@@ -33,7 +33,6 @@ public class MapAdapter extends RecyclerView.Adapter<MapAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull final MapAdapter.ViewHolder holder, final int position) {
         holder.image.setOnDragListener(new View.OnDragListener() {
-            private boolean status = false;
             @Override
             public boolean onDrag(View v, DragEvent event) {
 
@@ -45,56 +44,42 @@ public class MapAdapter extends RecyclerView.Adapter<MapAdapter.ViewHolder> {
                     case DragEvent.ACTION_DRAG_STARTED:
                         return true;
                     case DragEvent.ACTION_DRAG_ENTERED:
-                        status = true;
-                        Log.d("ACTION_DRAG_ENTERED",String.valueOf(status));
+                        Log.d("ACTION_DRAG_ENTERED", "enter");
                         // Applies a green tint to the View. Return true; the return value is ignored.
-                        holder.image.setImageResource(R.drawable.part_ship);
-                        fields.get(position).setStatus(StatusField.SHIP);
-
-                        // Invalidate the view to force a redraw in the new tint
-                        holder.image.invalidate();
+                        if (fields.get(position).getStatus() == StatusField.EMPTY) {
+                            fields.get(position).setStatus(StatusField.HOVER);
+                            notifyItemChanged(position);
+                        }
                         return true;
 
                     case DragEvent.ACTION_DRAG_LOCATION:
                         return true;
 
                     case DragEvent.ACTION_DRAG_EXITED:
-                        holder.image.clearColorFilter();
-                        holder.image.setImageResource(R.drawable.empty_field);
-                        fields.get(position).setStatus(StatusField.EMPTY);
-                        status = false;
-                        Log.d("ACTION_DRAG_EXITED",String.valueOf(status));
+                        if (fields.get(position).getStatus() == StatusField.HOVER) {
+                            fields.get(position).setStatus(StatusField.EMPTY);
+                            notifyItemChanged(position);
+                        }
+                        Log.d("ACTION_DRAG_EXITED", "");
                         return true;
 
                     case DragEvent.ACTION_DROP:
-
-                        // Gets the item containing the dragged data
-
-                        // Turns off any color tints
-                        holder.image.clearColorFilter();
-
-                        // Invalidates the view to force a redraw
-                        holder.image.invalidate();
-                        Log.d("ACTION_DRAG_DROP",String.valueOf(status));
-                        return status;
+                        Log.d("ACTION_DRAG_DROP", "");
+                        if (fields.get(position).getStatus() == StatusField.SHIP) {
+                            return false; // rejects the drop (field is not empty or allowed)
+                        } else {
+                            fields.get(position).setStatus(StatusField.SHIP);
+                            notifyItemChanged(position);
+                            return true; // accepts the drop - place the ship
+                        }
 
                     case DragEvent.ACTION_DRAG_ENDED:
-                        // Turns off any color tinting
-                        holder.image.clearColorFilter();
-
-                        // Invalidates the view to force a redraw
-                        holder.image.invalidate();
                         Log.d("ACTION_DRAG_ENDED",String.valueOf(event.getResult()));
                         /*if (event.getResult()) {
                             Log.d("ACTION_DRAG_ENDED", "зашёл");
                             fields.get(position).setStatus(StatusField.SHIP);
                              notifyDataSetChanged();
                         }*/
-                        notifyDataSetChanged();
-
-                        // Does a getResult(), and displays what happened.
-
-                        // returns true; the value is ignored.
                         return true;
 
                     // An unknown action type was received.
@@ -109,10 +94,18 @@ public class MapAdapter extends RecyclerView.Adapter<MapAdapter.ViewHolder> {
         switch(fields.get(position).getStatus()){
             case EMPTY:
                 holder.image.setImageResource(R.drawable.empty_field);
+                holder.image.setImageAlpha(255);
                 Log.d("Constructor", "EMPTY");
+                break;
+            case HOVER:
+                holder.image.setImageResource(R.drawable.part_ship);
+                // @todo: set proper icon here
+                holder.image.setImageAlpha(127);
+                Log.d("Constructor", "HOVER");
                 break;
             case SHIP:
                 holder.image.setImageResource(R.drawable.part_ship);
+                holder.image.setImageAlpha(255);
                 Log.d("Constructor", "SHIP");
                 break;
         }
