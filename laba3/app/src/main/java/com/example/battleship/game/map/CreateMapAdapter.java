@@ -1,6 +1,5 @@
 package com.example.battleship.game.map;
 
-import android.content.Context;
 import android.util.Log;
 import android.view.DragEvent;
 import android.view.LayoutInflater;
@@ -15,24 +14,22 @@ import com.example.battleship.R;
 
 import java.util.List;
 
-public class MapAdapter extends RecyclerView.Adapter<MapAdapter.ViewHolder> {
-    private final List<Field> fields;
-    private Context context;
+public class CreateMapAdapter extends RecyclerView.Adapter<CreateMapAdapter.ViewHolder> {
+    private List<Field> fields;
     private int countShip = 0;
 
-    public MapAdapter(List<Field> fields) {
+    public CreateMapAdapter(List<Field> fields){
         this.fields = fields;
-        this.context = context;
     }
 
     @Override
-    public MapAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType){
+    public CreateMapAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType){
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.map_item, parent, false);
-        return new MapAdapter.ViewHolder(view);
+        return new CreateMapAdapter.ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull final MapAdapter.ViewHolder holder, final int position) {
+    public void onBindViewHolder(@NonNull final CreateMapAdapter.ViewHolder holder, final int position) {
         holder.image.setOnDragListener(new View.OnDragListener() {
             @Override
             public boolean onDrag(View v, DragEvent event) {
@@ -142,6 +139,7 @@ public class MapAdapter extends RecyclerView.Adapter<MapAdapter.ViewHolder> {
     }
 
     public boolean checkCountShip(){
+        Log.d("ShipCount", String.valueOf(countShip));
         return countShip == 10;
     }
 

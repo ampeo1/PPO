@@ -5,4 +5,5 @@ public enum StatusField {
     SHIP,
     SHOT,
     HOVER,
+    DESTROY_SHIP,
 }

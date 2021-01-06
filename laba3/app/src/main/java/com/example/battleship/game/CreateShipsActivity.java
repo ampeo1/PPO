@@ -1,6 +1,7 @@
 package com.example.battleship.game;
 
 import android.content.ClipData;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -8,13 +9,13 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.battleship.R;
-import com.example.battleship.game.map.MapAdapter;
-import com.example.battleship.room.RoomViewModel;
+import com.example.battleship.game.map.FragmentMap;
+import com.example.battleship.game.map.CreateMapAdapter;
+import com.example.battleship.room.UserEnum;
 
 public class CreateShipsActivity extends AppCompatActivity {
     private static final String TAG_SHIP_ONE = "ship_one";
@@ -29,15 +30,25 @@ public class CreateShipsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_create_ships);
         mViewModel = new ViewModelProvider(this).get(CreateShipsViewModel.class);
 
+        RecyclerView recyclerView = getSupportFragmentManager().findFragmentById(R.id.create_ship_map).getActivity().findViewById(R.id.recyclerView);
+        recyclerView.setAdapter(new CreateMapAdapter(mViewModel.getEmptyMap()));
+
+
         Button btn = findViewById(R.id.btn_ready);
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.create_ship_map);
+                FragmentMap fragment = (FragmentMap)getSupportFragmentManager().findFragmentById(R.id.create_ship_map);
                 RecyclerView recyclerView = fragment.getActivity().findViewById(R.id.recyclerView);
-                MapAdapter adapter = (MapAdapter)recyclerView.getAdapter();
-                if(adapter.checkCountShip()){
-                    Toast.makeText(getApplicationContext(), "Готов", Toast.LENGTH_LONG).show();
+                CreateMapAdapter adapter = (CreateMapAdapter)recyclerView.getAdapter();
+                UserEnum userEnum = UserEnum.valueOf(getIntent().getStringExtra("user"));
+                String idRoom = getIntent().getStringExtra("id_room");
+
+                if (adapter != null && mViewModel.pushMap(adapter, userEnum, idRoom)){
+                    Intent intent = new Intent(getApplicationContext(), GameActivity.class);
+                    intent.putExtra("id_room", idRoom);
+                    intent.putExtra("user", userEnum.name());
+                    startActivity(intent);
                 }
                 else{
                     Toast.makeText(getApplicationContext(), "Не готов", Toast.LENGTH_LONG).show();

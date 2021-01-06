@@ -55,6 +55,8 @@ public class RoomActivity extends AppCompatActivity {
                     Picasso.with(getApplicationContext()).load(R.drawable.tick).into(image);
                     if (mViewModel.getEnemystatus().getValue()){
                         Intent intent = new Intent(getApplicationContext(), CreateShipsActivity.class);
+                        intent.putExtra("id_room", mViewModel.getIdRoom());
+                        intent.putExtra("user", mViewModel.getUserEnum().name());
                         startActivity(intent);
                     }
                 }
@@ -93,7 +95,7 @@ public class RoomActivity extends AppCompatActivity {
                     if(mViewModel.getStatus()){
                         Intent intent = new Intent(getApplicationContext(), CreateShipsActivity.class);
                         intent.putExtra("id_room", mViewModel.getIdRoom());
-                        intent.putExtra("user", mViewModel.getUserEnum());
+                        intent.putExtra("user", mViewModel.getUserEnum().name());
                         startActivity(intent);
                     }
                 }
