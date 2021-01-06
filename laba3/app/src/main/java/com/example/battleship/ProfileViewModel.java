@@ -7,38 +7,32 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.UserProfileChangeRequest;
+import com.example.battleship.model.UserAuth;
 
 public class ProfileViewModel extends AndroidViewModel {
-    private FirebaseUser user;
     private MutableLiveData<String> usernameLiveData = null;
 
     public ProfileViewModel(@NonNull Application application) {
         super(application);
-        user = FirebaseAuth.getInstance().getCurrentUser();
     }
 
     public MutableLiveData<String> getUserNameLiveData(){
         if (usernameLiveData == null){
-            usernameLiveData = new MutableLiveData<>(user.getDisplayName());
+            usernameLiveData = new MutableLiveData<>(UserAuth.getUserName());
         }
         return usernameLiveData;
     }
 
     public void setUserName(String username){
-        UserProfileChangeRequest profileUpdate = new UserProfileChangeRequest.Builder().setDisplayName(username).build();
-        user.updateProfile(profileUpdate);
-        usernameLiveData.setValue(user.getDisplayName());
+        UserAuth.ChangeUserName(username);
+        usernameLiveData.setValue(UserAuth.getUserName());
     }
 
     public Uri getImageUri(){
-        return user.getPhotoUrl();
+        return UserAuth.getPhotoUri();
     }
 
     public void setImageUri(Uri uri){
-        UserProfileChangeRequest profileChangeRequest = new UserProfileChangeRequest.Builder().setPhotoUri(uri).build();
-        user.updateProfile(profileChangeRequest);
+        UserAuth.ChangeAvatar(uri);
     }
 }

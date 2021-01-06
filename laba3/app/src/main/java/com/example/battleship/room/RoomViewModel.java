@@ -9,11 +9,11 @@ import androidx.annotation.RequiresApi;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 
+import com.example.battleship.model.Database;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
@@ -21,8 +21,6 @@ import java.util.Objects;
 import java.util.UUID;
 
 public class RoomViewModel extends AndroidViewModel {
-    private DatabaseReference userRef;
-    private DatabaseReference enemyRef;
     private boolean status = false;
     private FirebaseUser user;
     private MutableLiveData<String> enemyUserName;
@@ -30,12 +28,14 @@ public class RoomViewModel extends AndroidViewModel {
     private MutableLiveData<Boolean> enemyStatus;
     private String idRoom;
     private UserEnum userEnum;
+    private UserEnum enemyEnum;
 
 
     public RoomViewModel(@NonNull Application application){
         super(application);
         idRoom = UUID.randomUUID().toString().substring(0, 6);
         userEnum = UserEnum.FIRST_USER;
+        enemyEnum = UserEnum.SECOND_USER;
         setData(userEnum);
     }
 
@@ -47,6 +47,7 @@ public class RoomViewModel extends AndroidViewModel {
         super(application);
         this.idRoom = idRoom;
         userEnum = UserEnum.SECOND_USER;
+        enemyEnum = UserEnum.FIRST_USER;
         setData(userEnum);
     }
 
@@ -60,7 +61,7 @@ public class RoomViewModel extends AndroidViewModel {
 
     public void changeStatus(){
         status = !status;
-        userRef.child("status").setValue(status);
+        Database.getCurrentUserStatus(idRoom, userEnum).setValue(status);
     }
 
     public Uri getPhotoUri(){
@@ -106,18 +107,10 @@ public class RoomViewModel extends AndroidViewModel {
     private void setData(final UserEnum userEnum){
         user = FirebaseAuth.getInstance().getCurrentUser();
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        userRef = database.getReference(idRoom).child(userEnum.name());
-        userRef.child("avatar").setValue(getPhotoUri().toString());
-        userRef.child("username").setValue(getUserName());
+        Database.getCurrentUserAvatar(idRoom, userEnum).setValue(getPhotoUri().toString());
+        Database.getCurrentUsername(idRoom, userEnum).setValue(getUserName());
 
-        if (userEnum == UserEnum.FIRST_USER){
-            enemyRef = database.getReference(idRoom).child(UserEnum.SECOND_USER.name());
-        }
-        else{
-            enemyRef = database.getReference(idRoom).child(UserEnum.FIRST_USER.name());
-        }
-
-        enemyRef.addListenerForSingleValueEvent(new ValueEventListener() {
+        Database.getCurrentUserRoomRef(idRoom, enemyEnum).addListenerForSingleValueEvent(new ValueEventListener() {
             @RequiresApi(api = Build.VERSION_CODES.KITKAT)
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -142,7 +135,7 @@ public class RoomViewModel extends AndroidViewModel {
             }
         });
 
-        enemyRef.child("username").addValueEventListener(new ValueEventListener() {
+        Database.getCurrentUsername(idRoom, enemyEnum).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.getValue() != null){
@@ -156,7 +149,7 @@ public class RoomViewModel extends AndroidViewModel {
             }
         });
 
-        enemyRef.child("avatar").addValueEventListener(new ValueEventListener() {
+        Database.getCurrentUserAvatar(idRoom, enemyEnum).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.getValue() != null){
@@ -170,7 +163,7 @@ public class RoomViewModel extends AndroidViewModel {
             }
         });
 
-        enemyRef.child("status").addValueEventListener(new ValueEventListener() {
+        Database.getCurrentUserStatus(idRoom, userEnum).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.getValue() != null){

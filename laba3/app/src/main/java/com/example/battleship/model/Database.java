@@ -35,4 +35,24 @@ public class Database {
     public static DatabaseReference getStatusBattle(String idRoom){
         return db.getReference(idRoom);
     }
+
+    public static DatabaseReference getCurrentUserRoomRef(String idRoom, UserEnum userEnum){
+        return db.getReference(idRoom).child(userEnum.name());
+    }
+
+    public static DatabaseReference getCurrentUserAvatar(String idRoom, UserEnum userEnum){
+        return getCurrentUserRoomRef(idRoom, userEnum).child("avatar");
+    }
+
+    public static DatabaseReference getCurrentUsername(String idRoom, UserEnum userEnum){
+        return getCurrentUserRoomRef(idRoom, userEnum).child("username");
+    }
+
+    public static DatabaseReference getCurrentUserStatus(String idRoom, UserEnum userEnum){
+        return getCurrentUserRoomRef(idRoom, userEnum).child("status");
+    }
+
+    public static DatabaseReference getRoom(String code){
+        return db.getReference(code);
+    }
 }
